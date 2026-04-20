@@ -1,0 +1,69 @@
+services: 
+
+
+
+  frontend: 
+
+
+
+    build: 
+
+
+
+      context: ./frontend 
+
+
+
+      dockerfile: Dockerfile 
+
+
+
+    container_name: frontend-container 
+
+
+
+    ports: 
+
+
+
+      - "8080:80" 
+
+
+
+    depends_on: 
+
+
+
+      - backend 
+
+
+
+ 
+
+
+
+  backend: 
+
+
+
+    build: 
+
+
+
+      context: ./backend 
+
+
+
+      dockerfile: Dockerfile 
+
+
+
+    container_name: backend-container 
+
+
+
+    ports: 
+
+
+
+      - "3000:3000" 
