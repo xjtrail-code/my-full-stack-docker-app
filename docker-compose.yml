@@ -2,7 +2,11 @@ services:
 
   nginx:
 
-    image: nginx:alpine
+    build:
+
+      context: ./nginx
+
+      dockerfile: Dockerfile
 
     container_name: nginx-container
 
@@ -10,25 +14,11 @@ services:
 
       - "80:80"
 
-    volumes:
-
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-
-    # volumes:
-
-    # - type: bind
-
-    #   source: ./nginx/nginx.conf
-
-    #   target: /etc/nginx/nginx.conf
-
     depends_on:
 
       - frontend
 
       - backend
-
-
 
   frontend:
 
@@ -40,10 +30,6 @@ services:
 
     container_name: frontend-container
 
-    # no ports: needed — nginx handles routing
-
-
-
   backend:
 
     build:
@@ -53,6 +39,3 @@ services:
       dockerfile: Dockerfile
 
     container_name: backend-container
-
-    # no ports: needed — nginx handles routing
-
