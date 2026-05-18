@@ -8,7 +8,7 @@ on:
 
     branches:
 
-      - main
+      - qa
 
     types:
 
@@ -23,6 +23,10 @@ jobs:
     if: github.event.pull_request.merged == true
 
     runs-on: ubuntu-latest
+
+    outputs:
+
+      sha_short: ${{ steps.vars.outputs.sha_short }}
 
 
 
@@ -105,13 +109,43 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/nginx:latest
 
             ${{ secrets.DOCKERHUB_USERNAME }}/nginx:${{ steps.vars.outputs.sha_short }}
-deploy:
+
+
+
+  deploy:
+
+    runs-on: self-hosted
+
     needs: build-and-push
-    runs-on: ubuntu-latest
+
+    outputs:
+
+      sha_short: ${{ steps.vars.outputs.sha_short }}
+
+
 
     steps:
-      - name: Deploy application
-        run: |
-          curl -o ~/app/deploy/docker-compose.yml https://raw.githubusercontent.com/innoetech-dev/my-full-stack-docker-app/refs/heads/feature/load-balancer/ci_docker-compose.yml
 
-Then:
+      - name: Pull and redeploy
+
+        env:
+
+          SHA: ${{ needs.build-and-push.outputs.sha_short }}
+
+          DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
+
+        run: |
+
+          mkdir -p ~/app/deploy
+
+          curl -o ~/app/deploy/docker-compose.yml https://raw.githubusercontent.com/innoetech-dev/my-full-stack-docker-app/refs/heads/feature/pipeline/ci_docker-compose.yml
+
+          cd ~/app/deploy
+
+          sed -i "s|YOUR_DOCKERHUB_USERNAME|$DOCKER_USER|g" docker-compose.yml
+
+          sed -i "s|YOUR_SHA|$SHA|g" docker-compose.yml
+
+          docker compose pull
+
+          docker compose up -d
