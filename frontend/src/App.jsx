@@ -181,7 +181,7 @@ export default function App() {
             <path d="M2 27 Q20 38 38 27" stroke="#00e5a0" strokeWidth="2.5" fill="none" strokeLinecap="round"/>
           </svg>
           <span className="nav-title">DockerLab</span>
-          <span className="nav-tag">v1.0.0</span>
+          <span className="nav-tag">v2.0.0</span>x>
         </div>
         <div className="nav-right">
           <span className="nav-clock"><LiveClock /></span>
