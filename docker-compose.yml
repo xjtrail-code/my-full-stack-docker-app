@@ -1,5 +1,55 @@
 services:
 
+
+
+  frontend:
+
+    build:
+
+      context: ./frontend
+
+      dockerfile: Dockerfile
+
+    container_name: frontend-container
+
+    ports:
+
+      - "8080:80"
+
+
+
+  backend-1:
+
+    build:
+
+      context: ./backend
+
+      dockerfile: Dockerfile
+
+    container_name: backend-container-1
+
+    ports:
+
+      - "3000:3000"
+
+
+
+  backend-2:
+
+    build:
+
+      context: ./backend
+
+      dockerfile: Dockerfile
+
+    container_name: backend-container-2
+
+    ports:
+
+      - "3001:3000"
+
+
+
   nginx:
 
     build:
@@ -18,24 +68,6 @@ services:
 
       - frontend
 
-      - backend
+      - backend-1
 
-  frontend:
-
-    build:
-
-      context: ./frontend
-
-      dockerfile: Dockerfile
-
-    container_name: frontend-container
-
-  backend:
-
-    build:
-
-      context: ./backend
-
-      dockerfile: Dockerfile
-
-    container_name: backend-container
+      - backend-2
