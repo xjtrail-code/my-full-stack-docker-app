@@ -105,3 +105,13 @@ jobs:
             ${{ secrets.DOCKERHUB_USERNAME }}/nginx:latest
 
             ${{ secrets.DOCKERHUB_USERNAME }}/nginx:${{ steps.vars.outputs.sha_short }}
+deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy application
+        run: |
+          curl -o ~/app/deploy/docker-compose.yml https://raw.githubusercontent.com/innoetech-dev/my-full-stack-docker-app/refs/heads/feature/load-balancer/ci_docker-compose.yml
+
+Then:
